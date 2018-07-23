@@ -47,6 +47,7 @@ static int geturl(const char *url, const char *username,
     sprintf(userpass, "%s:%s", username, password);
 
     curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_HTTPAUTH, (long)CURLAUTH_ANY);
     /* discard read data */
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, nop_wf);
     curl_easy_setopt(curl, CURLOPT_USERPWD, userpass);
