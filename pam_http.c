@@ -33,120 +33,120 @@
 static size_t nop_wf(void* a, size_t x, size_t y, void* b) { return x * y; }
 
 static int geturl(const char *url, const char *username,
-		  const char *password, const char *cafile)
+        const char *password, const char *cafile)
 {
-  CURL *curl = curl_easy_init();
-  CURLcode res = -1;
-  char *userpass;
-  int len = strlen(username) + strlen(password) + 2;
+    CURL *curl = curl_easy_init();
+    CURLcode res = -1;
+    char *userpass;
+    int len = strlen(username) + strlen(password) + 2;
 
-  if (!curl) return 0;
-  userpass = malloc(len);
-  if (!userpass) goto cleanup;
+    if (!curl) return 0;
+    userpass = malloc(len);
+    if (!userpass) goto cleanup;
 
-  sprintf(userpass, "%s:%s", username, password);
+    sprintf(userpass, "%s:%s", username, password);
 
-  curl_easy_setopt(curl, CURLOPT_URL, url);
-  /* discard read data */
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, nop_wf);
-  curl_easy_setopt(curl, CURLOPT_USERPWD, userpass);
-  /* provide no progress indicator */
-  curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
-  /* fail on HTTP errors */
-  curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
-  /* seed SSL randomness from somewhere; this is really problematic
-     because libcurl wants to read 16 kilobytes of randomness.  (Why
-     does it think it needs 131072 bits?  Does it think someone might
-     spend 10^39334 universe-lifetimes to brute-force our SSL
-     connection?) */
-  curl_easy_setopt(curl, CURLOPT_RANDOM_FILE, "/dev/urandom");
-  /* verify SSL peer's certificate */
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1);
-  /* and also verify that its name matches the name we're calling it by */
-  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2);
-  /* use this file for SSL cert verification */
-  curl_easy_setopt(curl, CURLOPT_CAINFO, cafile);
+    curl_easy_setopt(curl, CURLOPT_URL, url);
+    /* discard read data */
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, nop_wf);
+    curl_easy_setopt(curl, CURLOPT_USERPWD, userpass);
+    /* provide no progress indicator */
+    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
+    /* fail on HTTP errors */
+    curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
+    /* seed SSL randomness from somewhere; this is really problematic
+       because libcurl wants to read 16 kilobytes of randomness.  (Why
+       does it think it needs 131072 bits?  Does it think someone might
+       spend 10^39334 universe-lifetimes to brute-force our SSL
+       connection?) */
+    curl_easy_setopt(curl, CURLOPT_RANDOM_FILE, "/dev/urandom");
+    /* verify SSL peer's certificate */
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1);
+    /* and also verify that its name matches the name we're calling it by */
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2);
+    /* use this file for SSL cert verification */
+    curl_easy_setopt(curl, CURLOPT_CAINFO, cafile);
 
-  res = curl_easy_perform(curl);
+    res = curl_easy_perform(curl);
 
-  memset(userpass, '\0', len);
-  free(userpass);
- cleanup:
-  curl_easy_cleanup(curl);
+    memset(userpass, '\0', len);
+    free(userpass);
+    cleanup:
+    curl_easy_cleanup(curl);
 
-  return res == 0;
+    return res == 0;
 }
 
 /* pam arguments are normally of the form name=value.  This gets the
  * 'value' corresponding to the passed 'name' from the argument
  * list. */
 static const char *getarg(const char *name, int argc, const char **argv) {
-  int len = strlen(name);
-  while (argc) {
-    if (strlen(*argv) > len &&
-	!strncmp(name, *argv, len) &&
-	(*argv)[len] == '=') {
-      return *argv + len + 1;  /* 1 for the = */
+    int len = strlen(name);
+    while (argc) {
+        if (strlen(*argv) > len &&
+                !strncmp(name, *argv, len) &&
+                (*argv)[len] == '=') {
+            return *argv + len + 1;  /* 1 for the = */
+        }
+        argc--;
+        argv++;
     }
-    argc--;
-    argv++;
-  }
-  return 0;
+    return 0;
 }
 
 PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags,
-				   int argc, const char **argv)
+        int argc, const char **argv)
 {
-  struct pam_conv *item;
-  struct pam_message msg;
-  const struct pam_message *msgp;
-  struct pam_response *respp;
-  const char *username;
-  const char *cafile = getarg("cafile", argc, argv);  /* possibly NULL */
-  const char *url = getarg("url", argc, argv);
-  int rv = PAM_SUCCESS;
+    struct pam_conv *item;
+    struct pam_message msg;
+    const struct pam_message *msgp;
+    struct pam_response *respp;
+    const char *username;
+    const char *cafile = getarg("cafile", argc, argv);  /* possibly NULL */
+    const char *url = getarg("url", argc, argv);
+    int rv = PAM_SUCCESS;
 
-  if (!url) return PAM_AUTH_ERR;
+    if (!url) return PAM_AUTH_ERR;
 
-  msgp = &msg;
+    msgp = &msg;
 
-  msg.msg_style = PAM_PROMPT_ECHO_OFF;
-  msg.msg = "Tell me a secret: ";
+    msg.msg_style = PAM_PROMPT_ECHO_OFF;
+    msg.msg = "Tell me a secret: ";
 
-  if (pam_get_item(pamh, PAM_CONV, (const void**)&item) != PAM_SUCCESS) {
-    fprintf(stderr, "Couldn't get pam_conv\n");
-    return PAM_AUTH_ERR;
-  }
+    if (pam_get_item(pamh, PAM_CONV, (const void**)&item) != PAM_SUCCESS) {
+        fprintf(stderr, "Couldn't get pam_conv\n");
+        return PAM_AUTH_ERR;
+    }
 
-  if (pam_get_user(pamh, &username, 0) != PAM_SUCCESS) {
-    fprintf(stderr, "Couldn't get username\n");
-    return PAM_AUTH_ERR;
-  }
+    if (pam_get_user(pamh, &username, 0) != PAM_SUCCESS) {
+        fprintf(stderr, "Couldn't get username\n");
+        return PAM_AUTH_ERR;
+    }
 
-  item->conv(1, &msgp, &respp, item->appdata_ptr);
+    item->conv(1, &msgp, &respp, item->appdata_ptr);
 
-  if (!geturl(url, (char*)username, respp[0].resp, cafile))
-      rv = PAM_AUTH_ERR;
+    if (!geturl(url, (char*)username, respp[0].resp, cafile))
+        rv = PAM_AUTH_ERR;
 
-  memset(respp[0].resp, '\0', strlen(respp[0].resp));
-  free(respp);
+    memset(respp[0].resp, '\0', strlen(respp[0].resp));
+    free(respp);
 
-  return rv;
+    return rv;
 }
 
 PAM_EXTERN int pam_sm_setcred(pam_handle_t *pamh, int flags,
-			      int argc, const char **argv)
+        int argc, const char **argv)
 {
-  return PAM_SUCCESS;
+    return PAM_SUCCESS;
 }
 
 #ifdef PAM_STATIC  /* untested */
 
 struct pam_module _pam_http_modstruct = {
-  "pam_http",
-  pam_sm_authenticate,
-  pam_sm_setcred,
-  0, 0, 0, 0
+    "pam_http",
+    pam_sm_authenticate,
+    pam_sm_setcred,
+    0, 0, 0, 0
 };
 
 #endif
