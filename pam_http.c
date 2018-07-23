@@ -29,6 +29,14 @@
 #include <curl/curl.h>
 #include <curl/easy.h>
 
+#ifdef DEBUG
+#define num2str(x) str(x)
+#define str(x) #x
+#define debug(fmt, args...) printf("%s:%s:%d: " fmt, __FILE__, __FUNCTION__, __LINE__, args)
+#else
+#define debug(fmt, args...)
+#endif
+
 /* nop write function */
 static size_t nop_wf(void* a, size_t x, size_t y, void* b) { return x * y; }
 
