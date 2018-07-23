@@ -65,7 +65,7 @@ cafile is the PEM file in which to find certifying-authority
 At this writing, Apache supports at least the following 26 methods of
 user authentication:
 
-mod_auth --- text files on a remote server 
+mod_auth --- text files on a remote server
 	<http://httpd.apache.org/docs/mod/mod_auth.html>
 mod_auth_anon --- anonymous-ftp-style anonymous access
 	<http://httpd.apache.org/docs/mod/mod_auth_anon.html>
@@ -89,7 +89,7 @@ mod_auth_external --- run an external program, CGI-style, to authenticate
 mod_auth_kerb --- authenticate users with Kerberos
 mod_auth_ldap --- authenticate users with LDAP
        <http://www.muquit.com/muquit/software/mod_auth_ldap/mod_auth_ldap.html>
-mod_auth_mysql --- authenticate users with passwords stored in a MySQL 
+mod_auth_mysql --- authenticate users with passwords stored in a MySQL
 	database <http://sourceforge.net/projects/mod-auth-mysql/>
 mod_auth_nds --- authenticate users with passwords from Novell NDS,
 	using Linux ncpfs <http://users.drew.edu/~pwilson/mod_auth_nds/>
@@ -136,13 +136,13 @@ Bugs
   use HTTPS
 - doesn't have a list of SSL CA certificates to consult
 - doesn't follow redirects, although it could and probably should
-- most HTTP requests result in success even without authorization; 
+- most HTTP requests result in success even without authorization;
   this means that this module is likely to fail open if misconfigured.
   One way to solve this would be to require a "failopen=1" parameter
   to allow the use of URLs that succeed even without authentication.
-- I haven't audited libcURL, so I don't know if it does anything 
+- I haven't audited libcURL, so I don't know if it does anything
   IDIOTIC like leave usernames and passwords hanging around (this
-  code did for a while, so I wouldn't be surprised if libcURL did too) 
+  code did for a while, so I wouldn't be surprised if libcURL did too)
 - this doesn't provide the most helpful error messages
 - libcURL insists on having a FILE* to write error messages to and uses
   stderr by default!  I don't think it actually does write error messages

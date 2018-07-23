@@ -39,7 +39,7 @@ static int my_getpass(void *client, char *prompt, char *buffer, int buflen) {
   return 0;
 }
 
-static int geturl(const char *url, const char *username, 
+static int geturl(const char *url, const char *username,
 		  const char *password, const char *cafile)
 {
   CURL *curl = curl_easy_init();
@@ -95,8 +95,8 @@ static int geturl(const char *url, const char *username,
 static const char *getarg(const char *name, int argc, const char **argv) {
   int len = strlen(name);
   while (argc) {
-    if (strlen(*argv) > len && 
-	!strncmp(name, *argv, len) && 
+    if (strlen(*argv) > len &&
+	!strncmp(name, *argv, len) &&
 	(*argv)[len] == '=') {
       return *argv + len + 1;  /* 1 for the = */
     }
@@ -106,7 +106,7 @@ static const char *getarg(const char *name, int argc, const char **argv) {
   return 0;
 }
 
-PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, 
+PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags,
 				   int argc, const char **argv)
 {
   struct pam_conv *item;
@@ -146,7 +146,7 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags,
   return rv;
 }
 
-PAM_EXTERN int pam_sm_setcred(pam_handle_t *pamh, int flags, 
+PAM_EXTERN int pam_sm_setcred(pam_handle_t *pamh, int flags,
 			      int argc, const char **argv)
 {
   return PAM_SUCCESS;
