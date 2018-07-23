@@ -1,0 +1,8 @@
+#
+# /etc/pam.d/check_user - for Kragen's check_user program
+#
+
+auth     required       /home/kragen/devel/pam_http/pam_http.so url=http://localhost/~kragen/sekrit/
+account  required       pam_permit.so
+password required       pam_permit.so
+session  required       pam_permit.so

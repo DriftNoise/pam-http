@@ -1,0 +1,4 @@
+Version 2: initial release.  Not yet usable.
+
+Version 3: added license so people could use it.  Added parameter parsing so
+	you could specify what URL to use.
