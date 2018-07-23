@@ -27,17 +27,10 @@
 
 /* we use libcURL */
 #include <curl/curl.h>
-#include <curl/types.h>
 #include <curl/easy.h>
 
 /* nop write function */
 static size_t nop_wf(void* a, size_t x, size_t y, void* b) { return x * y; }
-
-/* nop password ask function */
-static int my_getpass(void *client, char *prompt, char *buffer, int buflen) {
-  buffer[0] = '\0';
-  return 0;
-}
 
 static int geturl(const char *url, const char *username,
 		  const char *password, const char *cafile)
@@ -61,11 +54,6 @@ static int geturl(const char *url, const char *username,
   curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
   /* fail on HTTP errors */
   curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
-  /* return an empty password if none supplied instead of the default
-     behavior, which is to fuck with the tty and half-assedly ask the
-     user for a password from somewhere in the guts of libcURL */
-  curl_easy_setopt(curl, CURLOPT_PASSWDFUNCTION, my_getpass);
-
   /* seed SSL randomness from somewhere; this is really problematic
      because libcurl wants to read 16 kilobytes of randomness.  (Why
      does it think it needs 131072 bits?  Does it think someone might
