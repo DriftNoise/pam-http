@@ -3,7 +3,7 @@
 CFLAGS += -Werror -Wall
 
 ifeq ($(DEBUG),1)
-    DEBUG_FLAGS = "-DDEBUG"
+    DEBUG_FLAGS = -DDEBUG
 endif
 
 all: check_user pam_http.so
