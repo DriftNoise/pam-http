@@ -150,3 +150,7 @@ struct pam_module _pam_http_modstruct = {
 };
 
 #endif
+
+/*
+  vim: expandtab shiftwidth=4
+*/

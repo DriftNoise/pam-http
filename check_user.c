@@ -57,3 +57,7 @@ int main(int argc, char *argv[])
 
     return ( retval == PAM_SUCCESS ? 0:1 );       /* indicate success */
 }
+
+/*
+  vim: expandtab shiftwidth=4
+*/
