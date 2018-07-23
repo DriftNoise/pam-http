@@ -48,13 +48,20 @@ static int geturl(const char *url, const char *username,
     char *userpass;
     int len = strlen(username) + strlen(password) + 2;
 
-    if (!curl) return 0;
+    if (!curl) {
+        debug("%s", "cURL not initialised\n");
+        return 0;
+    }
     userpass = malloc(len);
-    if (!userpass) goto cleanup;
+    if (!userpass) {
+        debug("%s", "Unable to allocate memory for username/password pair\n");
+        goto cleanup;
+    }
 
     sprintf(userpass, "%s:%s", username, password);
 
     curl_easy_setopt(curl, CURLOPT_URL, url);
+    debug("Using URL: %s\n", url);
     curl_easy_setopt(curl, CURLOPT_HTTPAUTH, (long)CURLAUTH_ANY);
     /* discard read data */
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, nop_wf);
@@ -77,6 +84,8 @@ static int geturl(const char *url, const char *username,
     curl_easy_setopt(curl, CURLOPT_CAINFO, cafile);
 
     res = curl_easy_perform(curl);
+
+    debug("curl_easy_perform() return value: %d\n", res);
 
     memset(userpass, '\0', len);
     free(userpass);
@@ -115,7 +124,10 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags,
     const char *url = getarg("url", argc, argv);
     int rv = PAM_SUCCESS;
 
-    if (!url) return PAM_AUTH_ERR;
+    if (!url) {
+        debug("%s", "URL not set\n");
+        return PAM_AUTH_ERR;
+    }
 
     msgp = &msg;
 
@@ -139,6 +151,8 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags,
 
     memset(respp[0].resp, '\0', strlen(respp[0].resp));
     free(respp);
+
+    debug("Authentication return value: %d\n", rv);
 
     return rv;
 }
