@@ -4,8 +4,14 @@ Contents: Quick start, Copyright information, Who cares?, Bugs
 
 ## Quick start
 
-To build: type make.  You'll need to have libcurl installed for this
-to work.
+Make sure development files for PAM and for cURL are installed e.g. on Debian
+based systems:
+
+```
+sudo apt install libpam0g-dev libcurl-dev
+```
+
+To build: type `make`.
 
 To test: copy `pam.d/check_user` into `/etc/pam.d/check_user`.  Change the
 path inside it to refer to where you just built `pam_http.so`.  Run
