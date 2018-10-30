@@ -11,8 +11,8 @@ by Kragen Sitaker, posted to the `kragen-hacks` mailing list.
 
 ## Quick start
 
-Make sure development files for PAM and for cURL are installed e.g. on Debian
-based systems:
+Make sure the development files for PAM and for cURL are installed, e.g. on
+Debian-based systems:
 
 ```
 sudo apt install libpam0g-dev libcurl-dev
@@ -23,7 +23,7 @@ To build: type `make`.
 To test: copy `pam.d/check_user` into `/etc/pam.d/check_user`.  Change the
 path inside it to refer to where you just built `pam_http.so`.  Run
 `check_user username`.  It will authenticate you against the URL
-specified in `/etc/pam.d/check_user` --- by default,
+specified in `/etc/pam.d/check_user` -- by default,
 http://localhost/~kragen/sekrit/.
 
 ## Who cares?
@@ -65,7 +65,7 @@ certificates.
 - doesn't follow redirects, although it could and probably should
 - most HTTP requests result in success even without authorization;
   this means that this module is likely to fail open if misconfigured.
-  One way to solve this would be to require a "failopen=1" parameter
+  One way to solve this would be to require a `"failopen=1"` parameter
   to allow the use of URLs that succeed even without authentication.
 - I haven't audited libcURL, so I don't know if it does anything
   IDIOTIC like leave usernames and passwords hanging around (this
