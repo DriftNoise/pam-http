@@ -1,9 +1,6 @@
-sudo: required
+sudo: false
 
 language: c
-
-install:
-    - sudo apt install libpam-dev libcurl4-gnutls-dev
 
 script:
     - make
