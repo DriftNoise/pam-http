@@ -1,6 +1,6 @@
 # `pam_http`: PAM module for HTTP authentication
 
-Contents: Quick start, Copyright information, Who cares?, Bugs
+[![Build Status](https://travis-ci.org/DriftNoise/pam-http.svg?branch=master)](https://travis-ci.org/DriftNoise/pam-http)
 
 ## Quick start
 
