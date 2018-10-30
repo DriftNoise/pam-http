@@ -51,87 +51,21 @@ such as Apache.  This is handy for three reasons:
     against the same server, secure transport encryption, and server
     authentication (so you know you aren't sending your users' putative
     passwords to a spoofing server)
-  - there are lots more ways to get usernames and passwords for Apache
-    than there are for Unix; see below.
+  - there are many more ways to get usernames and passwords for Apache
+    than there are for Unix.
 
 You just configure `pam_http` with some URL; whenever it tries to
-  authenticate someone's password, it fetches that URL with their username
-  and the supplied password; if it got 200, it authenticates the user,
-  but if it gets any other result code, it fails.  You use it more or less
-  as follows; note that option parsing isn't yet implemented:
+authenticate someone's password, it fetches that URL with their username and
+the supplied password; if it got 200, it authenticates the user, but if it
+gets any other result code, it fails.  You use it more or less as follows;
+note that option parsing isn't yet implemented:
 
 ```
 auth required pam_http.so url=https://ourserver.example.com/ cafile=/usr/lib/ca-certificates.pem
 ```
 
-cafile is the PEM file in which to find certifying-authority
+where `cafile` is the PEM file in which to find certifying-authority
 certificates.
-
-At this writing, Apache supports at least the following 26 methods of
-user authentication:
-
-`mod_auth` --- text files on a remote server
-	<http://httpd.apache.org/docs/mod/mod_auth.html>
-`mod_auth_anon` --- anonymous-ftp-style anonymous access
-	<http://httpd.apache.org/docs/mod/mod_auth_anon.html>
-`mod_auth_db` --- authenticate users with passwords stored in Berkeley DB
-	files <http://httpd.apache.org/docs/mod/mod_auth_db.html>
-Apache::AuthenDBI --- authenticate users with passwords stored in any
-        database supported by Perl DBI (currently Adabas, Adaptive Server,
-        Altera, CSV files, DB2, Empress, Microsoft SQL Server, Sybase,
-        SearchServer, Illustra, Informix, Ingres, anything you have an
-        ODBC driver for, Oracle, QBase, SOLID, SQLFLEX, Sybase, Unify,
-        XBase, msql, MySQL, InterBase, dtF/SQL, anything you have ADO for,
-        Excel, PostgreSQL, LDAP; see <http://dbi.symbolstone.org/>
-        for current list) (succeeds mod_auth_dbi)
-        <http://www.perldoc.com/cpan/Apache/AuthenDBI.html>
-`mod_auth_dbm` --- authenticate users with passwords stored in DBM files
-	<http://httpd.apache.org/docs/mod/mod_auth_dbm.html>
-`mod_auth_external` --- run an external program, CGI-style, to authenticate
-	users; comes with external programs that authenticate with PAM,
-	RADIUS, and Sybase
-	<http://www.wwnet.net/~janc/mod_auth_external.html>
-`mod_auth_kerb` --- authenticate users with Kerberos
-`mod_auth_ldap` --- authenticate users with LDAP
-       <http://www.muquit.com/muquit/software/mod_auth_ldap/mod_auth_ldap.html>
-`mod_auth_mysql` --- authenticate users with passwords stored in a MySQL
-	database <http://sourceforge.net/projects/mod-auth-mysql/>
-`mod_auth_nds` --- authenticate users with passwords from Novell NDS,
-	using Linux ncpfs <http://users.drew.edu/~pwilson/mod_auth_nds/>
-`mod_auth_samba` --- authenticate users with passwords on SMB servers
-	<http://sourceforge.net/projects/modauthsamba/>
-`mod_auth_sys` --- authenticate users with getpwnam, `pam_unix`-style
-	(apocryphal)
-`mod_auth_nis` --- presumably, authenticate users with NIS (apocryphal)
-`mod_auth_dce` --- authenticate users with DCE security registry
-	<http://www.csupomona.edu/~henson/www/projects/>
-`mod_auth_notes` --- presumably, authenticate users with Lotus Notes
-	(apocryphal)
-`mod_auth_pg` --- authenticate users with passwords stored in PostgreSQL
-	<http://authpg.sourceforge.net/>
-`mod_auth_radius` --- authenticate users with RADIUS
-	<http://www.freeradius.org/mod_auth_radius/>
-`mod_auth_rdbm` --- authenticate users with DBM files on another machine
-	accessed with RPC
-	<http://www.webthing.com/software/AnyDBM/apache.html>
-`mod_auth_yard` --- ??? apocryphal
-`mod_ldap` --- child of `mod_auth_ldap`; authenticate users with LDAP
-`mod_auth_tds` --- authenticate users against TDS-compliant databases like
-	MS SQL Server or Sybase
-	<http://ian.cwru.edu/projects/mod_auth_tds.html>
-`mod_auth_unixODBC` --- authenticate users against any database accessible
-	via unixODBC <http://home-4.tiscali.nl/~t794104/mod_auth_unixodbc/>
-`mod_ntlm` --- authenticate users with native Windows calls on Apache 1.3
-`mod_ntlm` --- authenticate users with the NT LAN Manager protocol on
-	Unix <http://modntlm.soureforge.net>
-`mod_auth_pam` --- authenticate users with PAM; using this turns HTTP
-	into merely an RPC protocol for PAM, which is handy if you have
-	PAM modules available on one machine but not on others (due to
-	different OSes, different hardware, different physical locations,
-	etc.) <http://pam.sourceforge.net/mod_auth_pam/>
-`mod_auth_sspi` --- authenticate users with native Windows calls with Apache 2.0;
-	successor to the Windows mod_ntlm
-	<http://members.ozemail.com.au/~timcostello/mod_auth_sspi/>
 
 ## Bugs
 
