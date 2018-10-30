@@ -2,6 +2,13 @@
 
 [![Build Status](https://travis-ci.org/DriftNoise/pam-http.svg?branch=master)](https://travis-ci.org/DriftNoise/pam-http)
 
+Integrate HTTP basic authentication into the standard UNIX authentication
+system.
+
+This project is a fork of the [original
+code](https://www.mail-archive.com/kragen-hacks@canonical.org/msg00020.html)
+by Kragen Sitaker, posted to the `kragen-hacks` mailing list.
+
 ## Quick start
 
 Make sure development files for PAM and for cURL are installed e.g. on Debian
